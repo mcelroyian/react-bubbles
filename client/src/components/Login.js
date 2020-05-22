@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-//import { useHistory } from 'react-router'
+import { useHistory } from 'react-router'
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const initCred = {
   username: '',
@@ -7,7 +8,7 @@ const initCred = {
 }
 
 const Login = () => {
-
+  const history = useHistory()
   const [cred, setCred] = useState(initCred)
 
   const handleChanges = e => {
@@ -19,8 +20,16 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    //Post request 
-    //Save token
+    //Post request
+    axiosWithAuth()
+      .post('api/login', cred)
+      .then(res => {
+        //Save token
+        localStorage.setItem('token', res.data.payload)
+        history.push('/bubbles')
+      })
+      .catch(err => console.log(err))
+    
     //redirect user
   }
 
@@ -39,7 +48,7 @@ const Login = () => {
           name='username'
           id='username'
           value={cred.username}
-          onchange={handleChanges}
+          onChange={handleChanges}
         />
         <label htmlFor='password'>Password:</label>
         <input
@@ -47,7 +56,7 @@ const Login = () => {
           name='password'
           id='password'
           value={cred.password}
-          onchange={handleChanges}
+          onChange={handleChanges}
         />
         <button>Log in</button>
       </form>
