@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const initCred = {
@@ -8,7 +8,7 @@ const initCred = {
 }
 
 const Login = () => {
-  const history = useHistory()
+  const { push } = useHistory()
   const [cred, setCred] = useState(initCred)
 
   const handleChanges = e => {
@@ -26,7 +26,7 @@ const Login = () => {
       .then(res => {
         //Save token
         localStorage.setItem('token', res.data.payload)
-        history.push('/bubbles')
+        push('/bubbles')
       })
       .catch(err => console.log(err))
     
